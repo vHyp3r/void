@@ -16,19 +16,18 @@ $secretKey = '0x4AAAAAAAKoHcOjITs-kgvYjkRu8yay9c8';
 	
 	$stream = stream_context_create($options);
 	
-	$result = file_get_contents(
-			$url_path, false, $stream);
-	
-	$response =  json_decode($result);
-if ($response->success == true) {
-// ok good
-}else{
-header('HTTP/1.0 403 Forbidden');
-if($frombrowserform) {
-die(header("Location: /"));
-}
-exit();
-}
+	$localDevelopment = getenv("VOID_LOCAL_DEV") === "1";
+	if (!$localDevelopment) {
+	    $result = file_get_contents($url_path, false, $stream);
+	    $response = json_decode($result);
+	    if ($response->success != true) {
+	        header('HTTP/1.0 403 Forbidden');
+	        if ($frombrowserform) {
+	            die(header("Location: /"));
+	        }
+	        exit();
+	    }
+	}
 $data = json_decode(file_get_contents('php://input'), true);
 if($_POST["username"] && $_POST["password"]){
 $username = urldecode($_POST['username']);
@@ -45,11 +44,14 @@ exit();
 if(strlen($username) > 19){
 exit();
 }
-$usernamecheck = json_decode(file_get_contents("http://www.voidrev.us/usercheck/checkifinvalidusernameforsignup?username=".$username.""),true);
-$usernamecheck = $usernamecheck['data'];
-if($usernamecheck != 0){
-echo"[]";
-exit();
+$usernamecheck = 0;
+if (!$localDevelopment) {
+    $usernamecheck = json_decode(file_get_contents("http://www.voidrev.us/usercheck/checkifinvalidusernameforsignup?username=".$username.""), true);
+    $usernamecheck = $usernamecheck['data'];
+}
+if ($usernamecheck != 0) {
+    echo"[]";
+    exit();
 }
 $options = [
 'cost' => 11,
@@ -86,11 +88,18 @@ $usrquery->execute(['username' => $username]);
 $usr = $usrquery->fetch();
 $uID = $usr['id'];
 $roblosec = $usr['ROBLOSECURITY'];
-setcookie("username", $username, time() + (460800* 30), "/", '.voidrev.us');
-setcookie("password", $password, time() + (460800* 30), "/", '.voidrev.us');
-setcookie(".ROBLOSECURITY", $roblosec, time() + (460800* 30), "/", '.voidrev.us');
-setcookie("access", "yes", time() + 24 * 60 * 60, "/", '.voidrev.us');
-setcookie(".RBXID", $roblosec, time() + (460800* 30), "/", '.voidrev.us');
+if ($localDevelopment) {
+    setcookie("username", $username, time() + (460800* 30), "/");
+    setcookie("password", $password, time() + (460800* 30), "/");
+    setcookie("_ROBLOSECURITY", $roblosec, time() + (460800* 30), "/");
+    setcookie("access", "yes", time() + 24 * 60 * 60, "/");
+} else {
+    setcookie("username", $username, time() + (460800* 30), "/", '.voidrev.us');
+    setcookie("password", $password, time() + (460800* 30), "/", '.voidrev.us');
+    setcookie(".ROBLOSECURITY", $roblosec, time() + (460800* 30), "/", '.voidrev.us');
+    setcookie("access", "yes", time() + 24 * 60 * 60, "/", '.voidrev.us');
+    setcookie(".RBXID", $roblosec, time() + (460800* 30), "/", '.voidrev.us');
+}
 $usrquery = $con->prepare("SELECT * FROM `users` WHERE `username` = :username");
 $usrquery->execute(['username' => $username]);
 $usr = $usrquery->fetch();
@@ -104,7 +113,7 @@ die(header("Location: /"));
 die('Forbidden, user already exists.');
 }
 if($frombrowserform) {
-die(header("Location: /home?nl=true"));
+die(header("Location: " . ($localDevelopment ? "/home?nl=true" : "https://www.voidrev.us/home?nl=true")));
 }
 echo json_encode([
 "userId" => $uID ?? 0,

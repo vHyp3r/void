@@ -1,7 +1,7 @@
 <?php
 require($_SERVER['DOCUMENT_ROOT']."/config/includes.php");
 if (is_array(getUserData($con))) {
-header("Location: https://www.voidrev.us/home");
+header("Location: " . (getenv("VOID_LOCAL_DEV") === "1" ? "/home" : "https://www.voidrev.us/home"));
 }
 ?>
 <!doctype html>

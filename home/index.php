@@ -1,6 +1,6 @@
 <?php include($_SERVER['DOCUMENT_ROOT'] . '/global.php');
 if (!$logged) {
-header('Location: https://www.voidrev.us/');
+header('Location: ' . (getenv("VOID_LOCAL_DEV") === "1" ? "/" : "https://www.voidrev.us/"));
 }
 ?>
 <!--[if IE 8]><html class=ie8 ng-app=robloxApp><![endif]--> <!--[if gt IE 8]><!-->
@@ -105,8 +105,8 @@ $friendsuser = $friends;
 <span class="avatar-status studio friend-status icon-studio" title="In Studio"></span>
 </div>
 </li>
-<? } ?></div>
-<? } ?>
+<?php } ?></div>
+<?php } ?>
 </ul>
 </div>
 </div>
@@ -215,10 +215,10 @@ $userfriends = $userquery->fetch();
 ?>
 <li class=list-item><a href="https://www.voidrev.us/users/<?=$feed['userid'];?>/profile" class=list-header><img class=header-thumb src=<?=getUserThumbnail($con,$feed['userid']);?>></a>
 <div class=list-body>
-<p class=list-content><a href="https://www.voidrev.us/users/<?=$feed['userid'];?>/profile"><? echo NoXSSPlz($userfriends['username']); ?></a>
-<p class="feedtext linkify">"<? echo NoXSSPlz($feed['status']); ?>"</p><span class="xsmall text-date-hint"><?php echo date("M d, Y | h:i A (T)", (int)$feed["timestamp"]); ?></span> <a href="https://www.voidrev.us/abusereport/Feed?id=<?=$feed['id'];?>&amp;redirectUrl=https%3A%2F%2Fwww.voidrev.us%2Fhome" class=abuse-report-modal> <span class=icon-report></span> </a>
+<p class=list-content><a href="https://www.voidrev.us/users/<?=$feed['userid'];?>/profile"><?php echo NoXSSPlz($userfriends['username']); ?></a>
+<p class="feedtext linkify">"<?php echo NoXSSPlz($feed['status']); ?>"</p><span class="xsmall text-date-hint"><?php echo date("M d, Y | h:i A (T)", (int)$feed["timestamp"]); ?></span> <a href="https://www.voidrev.us/abusereport/Feed?id=<?=$feed['id'];?>&amp;redirectUrl=https%3A%2F%2Fwww.voidrev.us%2Fhome" class=abuse-report-modal> <span class=icon-report></span> </a>
 </div>
-<? } ?>
+<?php } ?>
 </ul>
 </div>
 </div>

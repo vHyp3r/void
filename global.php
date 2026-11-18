@@ -1,8 +1,9 @@
 <?php
 // yes i cleaned ur code cuz MY EYESSS
 // i agree
-if (!(isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1) || isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) {
-$redirect = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+$localDevelopment = getenv("VOID_LOCAL_DEV") === "1";
+if (!$localDevelopment && !(isset($_SERVER['HTTPS']) && ($_SERVER['HTTPS'] == 'on' || $_SERVER['HTTPS'] == 1) || isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) {
+$redirect = ($localDevelopment ? 'http://' : 'https://') . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 header('HTTP/1.1 301 Moved Permanently');
 header('Location: ' . $redirect);
 exit();
@@ -32,7 +33,7 @@ $redirectURL = $redirs[basename($_SERVER['PHP_SELF'])];
 header("Location: $redirectURL");
 exit();
 } else {
-header("Location: https://www.voidrev.us/login/");
+header("Location: " . ($localDevelopment ? "/login/" : "https://www.voidrev.us/login/"));
 exit();
 }
 }
@@ -43,7 +44,7 @@ $redirectURL = $redirs[basename($_SERVER['PHP_SELF'])];
 header("Location: $redirectURL");
 exit();
 } else {
-header("Location: https://www.voidrev.us/login/");
+header("Location: " . ($localDevelopment ? "/login/" : "https://www.voidrev.us/login/"));
 exit();
 }
 }
@@ -59,7 +60,7 @@ $ExperimentalTheme = $usr['ExperimentalTheme'];
 if (is_array($usr)) {
 if ($usr['activated'] == 0) {
 if (basename($_SERVER['PHP_SELF']) != "/login/index.php" && $_SERVER['PHP_SELF'] != "/forgotPasswordOrUsername/index.php") {
-header("Location: https://www.voidrev.us/register/notactivated");
+header("Location: " . ($localDevelopment ? "/register/notactivated" : "https://www.voidrev.us/register/notactivated"));
 exit();
 }
 }
@@ -199,23 +200,23 @@ if($ExperimentalTheme == "Light"){
 }elseif($ExperimentalTheme == "2016E"){
 ?>
 <link rel="stylesheet" href="https://www.voidrev.us/css/2016e.css"/>
-<?
+<?php
 }elseif($ExperimentalTheme == "AprilFools"){
 ?>
 <link rel="stylesheet" href="https://www.voidrev.us/css/aprilfools.css"/>
-<?
+<?php
 }elseif($ExperimentalTheme == "Pdark"){
 ?>
 <link rel="stylesheet" href="https://www.voidrev.us/css/pdark.css"/>
-<?
+<?php
 }elseif($ExperimentalTheme == "newtheme"){
 ?>
 <link rel="stylesheet" href="https://www.voidrev.us/css/newtheme.css"/>
-<?
+<?php
 }else{
 ?>
 <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600" rel="stylesheet" type="text/css">
-<?
+<?php
 }
 ?>
 <?php
@@ -494,7 +495,7 @@ Admin
 <div class="xsmall age-bracket-label text-header">
 <span class="age-bracket-label-username"><?php echo NoXSSPlz($username);?>: </span>13+
 </div>
-<? } ?>
+<?php } ?>
 </div>
 <ul class="nav rbx-navbar hidden-md hidden-lg col-xs-12">
 <li>
@@ -590,7 +591,7 @@ Admin
 <li class="rbx-upgrade-now">
 <a href="https://www.voidrev.us/premium/membership?ctx=leftnav" class="btn-growth-md btn-secondary-md" id="upgrade-now-button">Upgrade Now</a>
 </li>
-<? } ?>
+<?php } ?>
 <li class="font-bold small text-nav">Events</li>
 </ul>
 </div>
@@ -605,7 +606,7 @@ Admin
 </div>
 </div>
 </div>
-<? } ?>
+<?php } ?>
 <div id=i18nForAmazonShopSwitch data-is-i18n-enabled-for-shop-amazon-dialog=true data-amazon-store-url="https://www.amazon.com/roblox?&amp;_encoding=UTF8&amp;tag=r05d13-20&amp;linkCode=ur2&amp;linkId=4ba2e1ad82f781c8e8cc98329b1066d0&amp;camp=1789&amp;creative=9325" style=display:none></div>
 <script>var Roblox=Roblox||{};(function(){if(Roblox&&Roblox.Performance){Roblox.Performance.setPerformanceMark("navigation_end");}})();</script>
 <div class=container-main>

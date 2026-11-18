@@ -2,11 +2,12 @@
 ob_start();
 error_reporting(E_ERROR);
 ini_set('display_errors', 0);
-$servername = "127.0.0.1";
-$dbusername = "root";
-$dbpassword = "_G-gfJgPiif/@/h4";
+$servername = getenv("VOID_DB_HOST") ?: "127.0.0.1";
+$dbname = getenv("VOID_DB_NAME") ?: "limbodb";
+$dbusername = getenv("VOID_DB_USER") ?: "voidrev";
+$dbpassword = getenv("VOID_DB_PASSWORD") ?: "voidrev-local-change-me";
 try {
-$con = new PDO("mysql:host=$servername;dbname=limbodb;charset=utf8mb4", $dbusername, $dbpassword);
+$con = new PDO("mysql:host=$servername;dbname=$dbname;charset=utf8mb4", $dbusername, $dbpassword);
 $con->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
 } catch(PDOException $e) {
 echo "uh oh database problems, here's an error: " . $e->getMessage();
@@ -30,4 +31,4 @@ error_log($error_message, 3, 'error.log');
 }
 }
 register_shutdown_function('errorhandler');
-$_SERVER['DOCUMENT_ROOT'] = "C:/wamp64/www/";
+$_SERVER['DOCUMENT_ROOT'] = dirname(__DIR__);

@@ -1,0 +1,19 @@
+2026-11-18 23:10:57 - Error: Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'limbodb.users' doesn't exist in /workspaces/void/config/main.php:86
+Stack trace:
+#0 /workspaces/void/config/main.php(86): PDO->prepare()
+#1 /workspaces/void/index.php(3): getUserData()
+#2 {main}
+  thrown in /workspaces/void/config/main.php on line 86
+2026-11-18 23:10:59 - Error: Uncaught PDOException: SQLSTATE[42S02]: Base table or view not found: 1146 Table 'limbodb.users' doesn't exist in /workspaces/void/config/main.php:86
+Stack trace:
+#0 /workspaces/void/config/main.php(86): PDO->prepare()
+#1 /workspaces/void/index.php(3): getUserData()
+#2 {main}
+  thrown in /workspaces/void/config/main.php on line 86
+2026-11-18 23:23:22 - Error: Uncaught PDOException: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'headshotthumbnailhash' in 'SELECT' in /workspaces/void/config/main.php:176
+Stack trace:
+#0 /workspaces/void/config/main.php(176): PDO->prepare()
+#1 /workspaces/void/home/index.php(43): getUserHeadshotThumbnail()
+#2 /workspaces/void/router.php(20): require('...')
+#3 {main}
+  thrown in /workspaces/void/config/main.php on line 176
